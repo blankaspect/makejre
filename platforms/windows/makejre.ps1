@@ -37,7 +37,7 @@
 #         <source-file>;<destination-directory>
 #     The destination directory must be relative to the output directory (see
 #     above).  Any whitespace before or after the ';' separator will be ignored.
-#       
+#
 #===============================================================================
 
 # Function: create a pathname from its components
@@ -125,7 +125,7 @@ if (-not (Test-Path -Path $moduleList -PathType Leaf))
 # Copy-list file
 if (-not ([string]::IsNullOrEmpty($args[5])))
 {
-	$copyList = $args[5]
+    $copyList = $args[5]
     if (-not (Test-Path -Path $copyList -PathType Leaf))
     {
         Write-Host "ERROR: no copy-list file was found at $copyList" -ForegroundColor Yellow
@@ -170,7 +170,7 @@ $modulePath = _path($jdkDir, "jmods")
 # Extract JavaFX JMODs
 if (-not ([string]::IsNullOrEmpty($jfxJmodsArchive)))
 {
-	# Create second temporary directory
+    # Create second temporary directory
     $temp2Dir = _path($outParentDir, '$temp-jfx$')
     if (Test-Path -Path $temp2Dir -PathType Container)
     {
@@ -179,15 +179,15 @@ if (-not ([string]::IsNullOrEmpty($jfxJmodsArchive)))
     Write-Host "Creating temporary directory: $temp2Dir"
     New-Item -Path $temp2Dir -ItemType "directory" > $null
 
-	# Extract JavaFX JMODs
+    # Extract JavaFX JMODs
     Write-Host "Extracting JavaFX JMODs from $jfxJmodsArchive to $temp2Dir"
     Expand-Archive -Path $jfxJmodsArchive -Destination $temp2Dir
 
-	# JavaFX JMODs directory
-	$jfxJmodsDir = _path($temp2Dir, (Get-ChildItem -Path $temp2Dir -Directory -Name | Select-Object -First 1))
+    # JavaFX JMODs directory
+    $jfxJmodsDir = _path($temp2Dir, (Get-ChildItem -Path $temp2Dir -Directory -Name | Select-Object -First 1))
 
-	# Append to module path
-	$modulePath += ";$jfxJmodsDir"
+    # Append to module path
+    $modulePath += ";$jfxJmodsDir"
 }
 
 # Location of jlink tool
@@ -276,7 +276,7 @@ Write-Host "Deleting temporary directory: $temp1Dir"
 Remove-Item -Recurse -Force $temp1Dir
 if ($temp2Dir -and (Test-Path -Path $temp2Dir -PathType Container))
 {
-	Write-Host "Deleting temporary directory: $temp2Dir"
+    Write-Host "Deleting temporary directory: $temp2Dir"
     Remove-Item -Recurse -Force $temp2Dir
 }
 Write-Host "Deleting output directory: $outDir"
