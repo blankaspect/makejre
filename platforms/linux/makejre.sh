@@ -4,10 +4,10 @@
 # Generates a Java runtime environment that may include JavaFX modules
 #
 # Parameters:
-#       
+#
 #   output-kind
 #     The kind of archive that will be generated: one of { tar.gz, zip }.
-#       
+#
 #   output-directory
 #     The location of the directory to which the JRE will be written.  The
 #     pathname must include a parent directory.
@@ -15,22 +15,22 @@
 #     directory of the output directory.  If <output-directory-name> is the name
 #     of the output directory, the filenames of the two archives will be:
 #         <output-directory-name>-linux.<output-kind>
-#         <output-directory-name>-src-linux.<output-kind>
+#         <output-directory-name>-linux-src.<output-kind>
 #     The output directory will be deleted after the two JRE archives are
 #     successfully created.
-#       
+#
 #   jdk-archive
 #     The location of the .tar.gz archive of the JDK that will provide modules,
 #     the linker and the source archive.
-#       
+#
 #   javafx-jmods-archive | 'null'
 #     The location of the .zip archive of the JavaFX JMOD files.  If this
 #     argument has the value 'null', it will be ignored.
-#       
+#
 #   module-list-file
 #     The location of the text file in which each non-empty line is the name of
 #     a module that will be included in the JRE.
-#       
+#
 #   copy-list-file (optional)
 #     The location of the text file in which each line specifies a file that
 #     will be copied to a directory in the JRE.  A line must have the form:
@@ -60,6 +60,10 @@ outDir=$2
 
 # Parent of output directory
 outParentDir="$(dirname "${outDir}")"
+if [ ${outParentDir} == "." ]; then
+	echo "ERROR: the pathname of the output directory must include a parent."
+	exit 1
+fi
 
 # Name of output directory
 outDirName="$(basename "${outDir}")"
@@ -114,7 +118,7 @@ modules=$(cat ${moduleList} | tr '\n' ',' | sed 's/,\+/,/g' | sed 's/^,//' | sed
 
 # Create first temporary directory
 temp1Dir="${outParentDir}/\$temp-jdk\$"
-[ -d ${temp1Dir} ] && rm --recursive --force ${temp1Dir}
+[ -d ${temp1Dir} ] && rm --recursive --force "${temp1Dir}"
 echo "Creating temporary directory: ${temp1Dir}"
 mkdir --parents "${temp1Dir}"
 
@@ -132,10 +136,10 @@ modulePath="${jdkDir}/jmods"
 if [ -v jfxJmodsArchive ]; then
 	# Create second temporary directory
 	temp2Dir="${outParentDir}/\$temp-jfx\$"
-	[ -d ${temp2Dir} ] && rm --recursive --force ${temp2Dir}
+	[ -d ${temp2Dir} ] && rm --recursive --force "${temp2Dir}"
 	echo "Creating temporary directory: ${temp2Dir}"
 	mkdir --parents "${temp2Dir}"
-	
+
 	# Extract JavaFX JMODs
 	echo "Extracting JavaFX JMODs from ${jfxJmodsArchive} to ${temp2Dir}"
 	unzip -q -d "${temp2Dir}" "${jfxJmodsArchive}"
@@ -151,7 +155,7 @@ fi
 linker="${jdkDir}/bin/jlink"
 
 # Delete output directory
-[ -d ${outDir} ] && rm --recursive --force ${outDir}
+[ -d ${outDir} ] && rm --recursive --force "${outDir}"
 
 # Generate JRE
 echo "Writing JRE to ${outDir}"
@@ -176,40 +180,44 @@ fi
 # Delete archive, no source
 archiveName="${outDirName}-linux.${outKind}"
 archive="${outParentDir}/${archiveName}"
-[ -f ${archive} ] && rm --force ${archive}
+[ -f ${archive} ] && rm --force "${archive}"
 
 # Create archive, no source
 echo "Creating JRE archive: ${archive}"
 if [ ${outKind} == "tar.gz" ]; then
-	tar --create --directory="${outParentDir}" --file="${archiveName}" --owner=0 --group=0 --gzip "${outDirName}"
+	tar --create --directory="${outParentDir}" --file="${archive}" --owner=0 --group=0 --gzip "${outDirName}"
 else
-	zip --quiet --recurse-paths "${archiveName}" "${outDir}"
+	pushd "${outParentDir}" > /dev/null
+	zip --quiet --recurse-paths "${archiveName}" "${outDirName}"
+	popd > /dev/null
 fi
 
 # Copy source archive to JRE
 cp "${jdkDir}/lib/src.zip" "${outDir}/lib"
 
 # Delete archive, source
-archiveName="${outDirName}-src-linux.${outKind}"
+archiveName="${outDirName}-linux-src.${outKind}"
 archive="${outParentDir}/${archiveName}"
-[ -f ${archive} ] && rm --force ${archive}
+[ -f ${archive} ] && rm --force "${archive}"
 
 # Create archive, source
 echo "Creating JRE archive: ${archive}"
 if [ ${outKind} == "tar.gz" ]; then
-	tar --create --directory="${outParentDir}" --file="${archiveName}" --owner=0 --group=0 --gzip "${outDirName}"
+	tar --create --directory="${outParentDir}" --file="${archive}" --owner=0 --group=0 --gzip "${outDirName}"
 else
-	zip --quiet --recurse-paths "${archiveName}" "${outDir}"
+	pushd "${outParentDir}" > /dev/null
+	zip --quiet --recurse-paths "${archiveName}" "${outDirName}"
+	popd > /dev/null
 fi
 
 # Delete temporary directories and output directory
 echo "Deleting temporary directory: ${temp1Dir}"
-rm --recursive --force ${temp1Dir}
+rm --recursive --force "${temp1Dir}"
 if [ ${temp2Dir} ] && [ -d ${temp2Dir} ]; then
 	echo "Deleting temporary directory: ${temp2Dir}"
-	rm --recursive --force ${temp2Dir}
+	rm --recursive --force "${temp2Dir}"
 fi
 echo "Deleting output directory: ${outDir}"
-rm --recursive --force ${outDir}
+rm --recursive --force "${outDir}"
 
 #-------------------------------------------------------------------------------
