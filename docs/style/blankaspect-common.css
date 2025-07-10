@@ -22,10 +22,6 @@ Common styles for Blank Aspect pages
   padding-top: 0.1em;
 }
 
-.hiddenText {
-  color: #F0F0E4;
-}
-
 .list {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
@@ -48,19 +44,25 @@ Common styles for Blank Aspect pages
   margin-top: 0;
 }
 
+a {
+  text-decoration: none;
+}
+a:link {
+  text-decoration: none;
+}
 a:hover {
-  background-color: #FCE880;
+  text-decoration: underline;
 }
 
 a.external {
   padding-right: 1.3em;
   background-position: 100% 50%;
   background-repeat: no-repeat;
-  background-image: url("../images/externalLink-light.svg");
 }
 
 a.hideHover:hover {
   background-color: transparent;
+  filter: brightness(1.0);
 }
 
 a img {
@@ -68,26 +70,20 @@ a img {
 }
 
 abbr {
-  border-bottom: 1px dotted #808080;
+  border-bottom: 1px dotted;
 }
 
 body {
-  color: #000000;
-  background-color: #F6F6F2;
   margin: 1.5em 3.0em;
   line-height: 150%;
 }
 
 div.example {
-  background-color: #F6F4DC;
-  border: 1px solid #E2E0C8;
+  display: table-cell;
+  border: 1px solid;
   margin: 0.4em 0;
   padding: 0.3em 0.6em;
-  font-weight: bold;
   font-size: 100%;
-}
-div.example code {
-  color: #404040;
 }
 
 div.figure {
@@ -121,27 +117,25 @@ div#lastModified > div > div.image {
 div.section {
   margin-top: 2.0em;
   padding-bottom: 1.5em;
-  border-bottom: 3px solid #B4B8C8;
+  border-bottom: 3px solid;
 }
 
 div#title {
   display: flex;
   align-items: center;
-  background-color: #E8ECF0;
   padding: 0.5em 1.5em;
-  border-top: 1px solid #D0D4D8;
-  border-bottom: 1px solid #D0D4D8;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
 }
 div#title > div {
   display: block;
-  color: #304868;
   font-size: 160%;
   font-weight: bold;
   padding-right: 0.75em;
 }
 
 div#tocPlaceholder {
-  border: 1px solid #C0C0C0;
+  border: 1px solid;
   padding: 1.0em;
 }
 
@@ -162,7 +156,6 @@ dl.basic dt.noBold {
 }
 
 h1 {
-  color: #304868;
   font-weight: bold;
   font-size: 160%;
   text-align: center;
@@ -170,7 +163,6 @@ h1 {
 }
 
 h2 {
-  color: #304868;
   font-weight: bold;
   font-size: 144%;
   margin-top: 1.5em;
@@ -178,7 +170,6 @@ h2 {
 }
 
 h3 {
-  color: #304868;
   font-weight: bold;
   font-size: 128%;
   margin-top: 1.5em;
@@ -186,7 +177,6 @@ h3 {
 }
 
 h4 {
-  color: #304868;
   font-weight: bold;
   font-size: 112%;
   margin-top: 1.5em;
@@ -194,7 +184,6 @@ h4 {
 }
 
 h5 {
-  color: #304868;
   font-weight: bold;
   font-size: 100%;
   margin-top: 1.2em;
@@ -259,8 +248,7 @@ table {
 }
 
 th {
-  background-color: #DEE2F0;
-  border: 1px solid #B4B8C8;
+  border: 1px solid;
   padding: 0.2em 0.6em;
   text-align: left;
 }
@@ -270,6 +258,120 @@ ul.toc {
 }
 ul.toc li {
   margin-left: -1.0em;
+}
+
+@media (prefers-color-scheme: light) {
+  .hiddenText {
+    color: #F6F6F2;
+  }
+
+  a:hover {
+    filter: brightness(2.0);
+  }
+
+  a.external {
+    background-image: url("../images/externalLink-light.svg");
+  }
+
+  abbr {
+    border-bottom-color: #808080;
+  }
+
+  body {
+    color: #000000;
+    background-color: #F6F6F2;
+  }
+
+  div.example {
+    background-color: #F6F4DC;
+    border-color: #E2E0C8;
+  }
+  div.example code {
+    color: #404040;
+  }
+
+  div.section {
+    border-bottom-color: #B4B8C8;
+  }
+
+  div#title {
+    background-color: #E8ECF0;
+    border-top-color: #D0D4D8;
+    border-bottom-color: #D0D4D8;
+  }
+  div#title > div {
+    color: #304868;
+  }
+
+  div#tocPlaceholder {
+    border-color: #C0C0C0;
+  }
+
+  h1, h2, h3, h4, h5 {
+    color: #304868;
+  }
+
+  th {
+    background-color: #DEE2F0;
+    border-color: #B4B8C8;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .hiddenText {
+    color: #202020;
+  }
+
+  a:hover {
+    filter: brightness(1.25);
+  }
+
+  a.external {
+    background-image: url("../images/externalLink-dark.svg");
+  }
+
+  abbr {
+    border-bottom-color: #A0A0A0;
+  }
+
+  body {
+    color: #F4F4F4;
+    background-color: #202020;
+  }
+
+  div.example {
+    background-color: #303448;
+    border-color: #586070;
+  }
+  div.example code {
+    color: #E0E0E0;
+  }
+
+  div.section {
+    border-bottom-color: #606888;
+  }
+
+  div#title {
+    background-color: #303448;
+    border-top-color: #606480;
+    border-bottom-color: #606480;
+  }
+  div#title > div {
+    color: #E0C8A8;
+  }
+
+  div#tocPlaceholder {
+    border-color: #606060;
+  }
+
+  h1, h2, h3, h4, h5 {
+    color: #E0C890;
+  }
+
+  th {
+    background-color: #303848;
+    border-color: #606060;
+  }
 }
 
 /*--------------------------------------------------------------------*/
