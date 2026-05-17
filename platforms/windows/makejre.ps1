@@ -51,12 +51,12 @@ function _path([string[]]$components)
 # Output kind
 if ([string]::IsNullOrEmpty($args[0]))
 {
-    Write-Host "ERROR: no output kind was specified." -ForegroundColor Yellow
+    Write-Host "ERROR: no output kind was specified." -ForegroundColor Red
     exit 1
 }
 if ("tar.gz", "zip" -cnotcontains $args[0])
 {
-    Write-Host "ERROR: the output kind must be one of { tar.gz, zip }." -ForegroundColor Yellow
+    Write-Host "ERROR: the output kind must be one of { tar.gz, zip }." -ForegroundColor Red
     exit 1
 }
 [string]$outKind = $args[0]
@@ -64,7 +64,7 @@ if ("tar.gz", "zip" -cnotcontains $args[0])
 # Output directory
 if ([string]::IsNullOrEmpty($args[1]))
 {
-    Write-Host "ERROR: no output directory was specified." -ForegroundColor Yellow
+    Write-Host "ERROR: no output directory was specified." -ForegroundColor Red
     exit 1
 }
 [string]$outDir = $args[1]
@@ -73,7 +73,7 @@ if ([string]::IsNullOrEmpty($args[1]))
 $outParentDir = Split-Path -Path $outDir -Parent
 if ([string]::IsNullOrEmpty($outParentDir))
 {
-    Write-Host "ERROR: the pathname of the output directory must include a parent." -ForegroundColor Yellow
+    Write-Host "ERROR: the pathname of the output directory must include a parent." -ForegroundColor Red
     exit 1
 }
 
@@ -83,20 +83,20 @@ $outDirName = Split-Path -Path $outDir -Leaf
 # JDK archive
 if ([string]::IsNullOrEmpty($args[2]))
 {
-    Write-Host "ERROR: no JDK archive was specified." -ForegroundColor Yellow
+    Write-Host "ERROR: no JDK archive was specified." -ForegroundColor Red
     exit 1
 }
 [string]$jdkArchive = $args[2]
 if (-not (Test-Path -Path $jdkArchive -PathType Leaf))
 {
-    Write-Host "ERROR: no JDK archive was found at $jdkArchive" -ForegroundColor Yellow
+    Write-Host "ERROR: no JDK archive was found at $jdkArchive" -ForegroundColor Red
     exit 1
 }
 
 # JavaFX JMODs archive
 if ([string]::IsNullOrEmpty($args[3]))
 {
-    Write-Host "ERROR: no JavaFX JMODs archive was specified." -ForegroundColor Yellow
+    Write-Host "ERROR: no JavaFX JMODs archive was specified." -ForegroundColor Red
     exit 1
 }
 if ($args[3] -cne "null")
@@ -104,7 +104,7 @@ if ($args[3] -cne "null")
     [string]$jfxJmodsArchive = $args[3]
     if (-not (Test-Path -Path $jfxJmodsArchive -PathType Leaf))
     {
-        Write-Host "ERROR: no JavaFX JMODs archive was found at $jfxJmodsArchive" -ForegroundColor Yellow
+        Write-Host "ERROR: no JavaFX JMODs archive was found at $jfxJmodsArchive" -ForegroundColor Red
         exit 1
     }
 }
@@ -112,13 +112,13 @@ if ($args[3] -cne "null")
 # Module-list file
 if ([string]::IsNullOrEmpty($args[4]))
 {
-    Write-Host "ERROR: no module-list file was specified." -ForegroundColor Yellow
+    Write-Host "ERROR: no module-list file was specified." -ForegroundColor Red
     exit 1
 }
 [string]$moduleList = $args[4]
 if (-not (Test-Path -Path $moduleList -PathType Leaf))
 {
-    Write-Host "ERROR: no module-list file was found at $moduleList" -ForegroundColor Yellow
+    Write-Host "ERROR: no module-list file was found at $moduleList" -ForegroundColor Red
     exit 1
 }
 
@@ -128,7 +128,7 @@ if (-not ([string]::IsNullOrEmpty($args[5])))
     $copyList = $args[5]
     if (-not (Test-Path -Path $copyList -PathType Leaf))
     {
-        Write-Host "ERROR: no copy-list file was found at $copyList" -ForegroundColor Yellow
+        Write-Host "ERROR: no copy-list file was found at $copyList" -ForegroundColor Red
         exit 1
     }
 }
@@ -220,7 +220,7 @@ if (-not ([string]::IsNullOrEmpty($copyList)))
         $strs = $line.Split(";", 2, [StringSplitOptions].None)
         if ($strs.Length -lt 2)
         {
-            Write-Host "ERROR: malformed line in copy list: $line" -ForegroundColor Yellow
+            Write-Host "ERROR: malformed line in copy list: $line" -ForegroundColor Red
             exit 1
         }
         $source = $strs[0].Trim()
